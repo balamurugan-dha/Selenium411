@@ -1,0 +1,12 @@
+<RequestMessage>
+    <?x GptRequest{inputXml='
+            <?xml version="1.0" encoding="UTF-8 standalone="yes"?>
+    <Calculation Origin="AB">
+        <Client InPricingCase="True">
+            <ClientDetails>
+                <Country>US</Country>
+            </ClientDetails>
+        </Client>
+    </Calculation>
+    ', dealId=11111, prodId=22222}?&gt;
+</RequestMessage>
