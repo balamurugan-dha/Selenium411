@@ -5,13 +5,23 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Test2 {
 
     public static void main(String[] args) {
 
+        Logger logger = Logger.getLogger("");
+        logger.setLevel(Level.FINE);
+        Arrays.stream(logger.getHandlers()).forEach(handler -> {
+            handler.setLevel(Level.FINE);
+        });
+
         ChromeOptions options = new ChromeOptions();
         options.setImplicitWaitTimeout(Duration.ofSeconds(20L));
+
         ChromeDriver driver = new ChromeDriver(options);
 
         driver.get("https://www.anthem.com/find-care/");
