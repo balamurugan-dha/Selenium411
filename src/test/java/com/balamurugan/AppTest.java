@@ -64,3 +64,21 @@ Sub HideColumnsBasedOnColor()
     Next col
 End Sub
     */
+
+/**
+Function GetRGBColor(cell As Range) As String
+    Dim r As Integer
+    Dim g As Integer
+    Dim b As Integer
+    
+    ' Check if cell has fill color
+    If cell.Interior.ColorIndex <> xlNone Then
+        r = cell.Interior.Color Mod 256
+        g = (cell.Interior.Color \ 256) Mod 256
+        b = (cell.Interior.Color \ 65536) Mod 256
+        GetRGBColor = "R:" & r & ", G:" & g & ", B:" & b
+    Else
+        GetRGBColor = "No fill color"
+    End If
+End Function
+    */
