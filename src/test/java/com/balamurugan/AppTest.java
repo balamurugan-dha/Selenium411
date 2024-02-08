@@ -103,3 +103,28 @@ Function GetRGBColor(cell As Range) As String
     End If
 End Function
     */
+
+/**
+Sub HideColumns()
+
+    Dim referenceColor As Long
+    referenceColor = Range("A1").Interior.Color
+
+    Dim col As Range
+    For Each col In ActiveSheet.UsedRange.Columns
+        Dim cell As Range
+        Dim hideColumn As Boolean
+        hideColumn = False
+        For Each cell In col.Cells
+            If cell.Interior.Color <> referenceColor Then
+                hideColumn = True
+                Exit For
+            End If
+        Next cell
+        If hideColumn Then
+            col.EntireColumn.Hidden = True
+        End If
+    Next col
+
+End Sub
+    */
