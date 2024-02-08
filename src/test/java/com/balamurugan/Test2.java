@@ -37,3 +37,27 @@ public class Test2 {
         driver.quit();
     }
 }
+
+/**
+Sub HideColumns()
+    Dim referenceColor As Long
+    referenceColor = Range("M17").Interior.Color
+
+    Dim col As Range
+    Dim cell As Range
+    Dim hideColumn As Boolean
+
+    For Each col In ActiveSheet.UsedRange.Columns
+        hideColumn = True ' Assume column will be hidden unless proven otherwise
+        For Each cell In col.Cells
+            If cell.Interior.Color <> referenceColor Then
+                hideColumn = True ' At least one cell doesn't match, so hide column
+                Exit For
+            Else
+                hideColumn = False ' All cells match, so don't hide column
+            End If
+        Next cell
+        col.EntireColumn.Hidden = hideColumn
+    Next col
+End Sub
+    */
