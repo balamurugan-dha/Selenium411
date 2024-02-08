@@ -128,3 +128,28 @@ Sub HideColumns()
 
 End Sub
     */
+
+/**
+Sub HideColumns()
+
+    Dim referenceColor As Long
+    referenceColor = Range("A1").Interior.Color
+
+    Dim col As Range
+    For Each col In ActiveSheet.UsedRange.Columns
+        Dim cell As Range
+        Dim hideColumn As Boolean
+        hideColumn = True
+        For Each cell In col.Cells
+            If cell.Interior.Color = referenceColor Then
+                hideColumn = False
+                Exit For
+            End If
+        Next cell
+        If hideColumn Then
+            col.EntireColumn.Hidden = True
+        End If
+    Next col
+
+End Sub
+    */
