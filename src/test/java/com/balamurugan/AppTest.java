@@ -82,3 +82,24 @@ Function GetRGBColor(cell As Range) As String
     End If
 End Function
     */
+
+/**
+Function GetRGBColor(cell As Range) As String
+    Dim r As Integer
+    Dim g As Integer
+    Dim b As Integer
+    Dim colorRGB As Long
+    
+    ' Check if cell has fill color
+    If cell.Interior.ColorIndex <> xlNone Then
+        ' Get the RGB color value
+        colorRGB = cell.Interior.Color
+        r = colorRGB Mod 256
+        g = (colorRGB \ 256) Mod 256
+        b = (colorRGB \ 65536) Mod 256
+        GetRGBColor = "R:" & r & ", G:" & g & ", B:" & b
+    Else
+        GetRGBColor = "No fill color"
+    End If
+End Function
+    */
