@@ -178,3 +178,51 @@ public class ManualAuthBidiExample {
     }
 }
 
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.UsernameAndPassword;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.NetworkInterceptor;
+import org.openqa.selenium.remote.http.HttpHandler;
+import org.openqa.selenium.remote.http.HttpRequest;
+
+import java.util.function.BiPredicate;
+
+public class LatestSeleniumAuthExample {
+
+    public static void main(String[] args) {
+        // Ensure you have a BiDi-capable driver like ChromeDriver or EdgeDriver
+        WebDriver driver = new ChromeDriver();
+
+        // 1. Define the URI for the protected resource
+        String authUrl = "the-internet.herokuapp.com/basic_auth";
+
+        // 2. Create a BiPredicate to filter network requests
+        BiPredicate<HttpRequest, HttpHandler> predicate =
+                (req, next) -> req.getUri().contains(authUrl);
+
+        // 3. Use a try-with-resources block for the NetworkInterceptor.
+        // This is the standard pattern shown in the official documentation.
+        try (NetworkInterceptor interceptor = new NetworkInterceptor(driver, predicate)) {
+
+            // 4. Register the authenticator with your credentials.
+            // The .register() method is the correct and standard way to do this.
+            interceptor.register(new UsernameAndPassword("admin", "admin"));
+
+            // 5. Navigate to the protected page
+            driver.get("https://the-internet.herokuapp.com/basic_auth");
+
+            // 6. Verify that authentication was successful
+            String successMessage = driver.findElement(By.tagName("p")).getText();
+            System.out.println("Page content after authentication: " + successMessage);
+            // In a real test, you would use an assertion here.
+        }
+
+        // Close the browser session
+        driver.quit();
+    }
+}
+
+
