@@ -121,3 +121,60 @@ public class BasicAuthBidiExample {
     }
 }
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.UsernameAndPassword;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.NetworkInterceptor;
+import org.openqa.selenium.remote.http.Filter;
+import org.openqa.selenium.remote.http.HttpHandler;
+import org.openqa.selenium.remote.http.HttpRequest;
+
+import java.util.function.Predicate;
+
+public class ManualAuthBidiExample {
+
+    public static void main(String[] args) {
+        WebDriver driver = new ChromeDriver();
+        String authUrl = "the-internet.herokuapp.com/basic_auth";
+
+        // 1. Define a predicate to identify the requests that need authentication.
+        Predicate<HttpRequest> authPredicate = req -> req.getUri().contains(authUrl);
+
+        // 2. Create a Filter to build your custom authentication logic.
+        // The 'next' parameter is the next handler in the chain, which we must call.
+        Filter authFilter = next -> request -> {
+
+            // 3. Check if the current request matches our predicate.
+            if (authPredicate.test(request)) {
+                // If it matches, create the credentials
+                UsernameAndPassword credentials = new UsernameAndPassword("admin", "admin");
+
+                // 4. Manually add the 'Authorization' header to the request.
+                // HttpRequest objects are immutable, so we create a new one with the added header.
+                HttpRequest authenticatedRequest = request.withHeader(
+                    "Authorization", 
+                    credentials.getAuthorization()
+                );
+
+                // 5. Execute the MODIFIED request by passing it to the next handler.
+                return next.execute(authenticatedRequest);
+            }
+
+            // 6. If the request does not need auth, pass it through unmodified.
+            return next.execute(request);
+        };
+
+        // 7. Create the NetworkInterceptor, passing it the custom Filter.
+        try (NetworkInterceptor interceptor = new NetworkInterceptor(driver, authFilter)) {
+            System.out.println("Navigating with manual authentication filter...");
+            driver.get("https://the-internet.herokuapp.com/basic_auth");
+
+            String successMessage = driver.findElement(By.tagName("p")).getText();
+            System.out.println("Page content after authentication: " + successMessage);
+        }
+
+        driver.quit();
+    }
+}
+
