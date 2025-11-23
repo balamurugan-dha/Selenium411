@@ -87,3 +87,57 @@ Sub HideColumns()
     Next col
 End Sub
     */
+
+/**
+
+CSS version
+     -------------
+
+     (function(sel){
+     var el = document.querySelector(sel);
+     if(!el) return 'NOT_FOUND';
+     var chain = [];
+     var a = el;
+     while(a){
+     var s = window.getComputedStyle(a);
+     chain.push({tag: a.tagName, id: a.id || null, display: s.display, visibility: s.visibility});
+     a = a.parentElement;
+     }
+     return chain;
+     })("div.section:nth-of-type(4) > button");
+
+
+     xpath version
+     --------------
+     (function(xpath){
+     // 1. Use document.evaluate instead of querySelector
+     var result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+
+     // 2. Extract the specific node from the result wrapper
+     var el = result.singleNodeValue;
+
+     // 3. The rest of your logic remains the same
+     if(!el) return 'NOT_FOUND';
+
+     var chain = [];
+     var a = el;
+     while(a){
+     // Get computed style
+     var s = window.getComputedStyle(a);
+
+     // Add to chain
+     chain.push({
+     tag: a.tagName,
+     id: a.id || null,
+     display: s.display,
+     visibility: s.visibility
+     });
+
+     // Move up
+     a = a.parentElement;
+     }
+     return chain;
+
+     // Pass your XPath string here
+     })("//div[contains(@class, 'section')][4]/button");
+*/
